@@ -1,22 +1,8 @@
 module "policies" {
-  source = "./iam_policy"
+  source = "git@github.com:ianforrest11/terraform_templates.git//aws/iam_user_policies?ref=main"
 }
 
 module "iam_user_creation" {
-  source = "./iam_user_creation"
-
-  users = {
-    "user_a" = {
-      first_name = "Ian"
-      last_name  = "Forrest"
-      team       = "Admin"
-      policies   = ["this_master", "this_2fa"]
-    },
-    "user_b" = {
-      first_name = "Bob"
-      last_name  = "Job"
-      team       = "ReadOnly"
-      policies   = ["this_readonly", "this_2fa"]
-    }
-  }
+  source = "git@github.com:ianforrest11/terraform_templates.git//aws/iam_user?ref=main"
+  users = var.users
 }
