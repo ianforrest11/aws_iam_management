@@ -1,4 +1,4 @@
-module "policies" {
+module "iam_user_policies" {
   source = "git@github.com:ianforrest11/terraform_templates.git//aws/iam_user_policies?ref=main"
 }
 
