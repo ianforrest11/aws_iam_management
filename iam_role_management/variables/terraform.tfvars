@@ -1,8 +1,8 @@
 roles = {
-"GitHubAction-AssumeRoleWithAction" = {
+"GitHubActionRole" = {
     assume_role_policy_name = "github"
     environment             = "shared"
-    name                    = "GitHubAction-AssumeRoleWithAction"
+    name                    = "GitHubActionRole"
     policies                = ["admin"]
     purpose                 = "facilitate github interactions with aws"
 
