@@ -34,7 +34,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubAction-AssumeRoleWithAction
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: us-east-1
 
@@ -131,4 +131,4 @@ jobs:
           terraform plan -var-file=../variables/terraform.tfvars
           
           # Apply Terraform changes (auto-approve for automation)
-          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
+          # while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
