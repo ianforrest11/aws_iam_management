@@ -6,4 +6,4 @@ roles = {
     policies                = ["arn:aws:iam::128333337075:policy/admin"]
     purpose                 = "facilitate github interactions with aws"
     }
-}
+} 
