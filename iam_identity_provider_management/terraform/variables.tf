@@ -1,1 +1,1 @@
-variable identity_provider {}
+variable identity_provider_github {}
