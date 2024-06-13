@@ -113,4 +113,22 @@ jobs:
           terraform plan -var-file=../variables/terraform.tfvars
           
           # Apply Terraform changes (auto-approve for automation)
-          terraform apply -auto-approve -var-file=../variables/terraform.tfvars
+          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
+
+      # Execute Terraform iam_role_management commands
+      - name: Execute Terraform iam_role_management
+        run: |
+          cd iam_role_management/terraform
+          echo "Entering directory iam_role_management/terraform"
+          
+          # Initialize Terraform
+          terraform init
+
+          # Validate Terraform configuration
+          terraform validate
+
+          # Plan Terraform changes
+          terraform plan -var-file=../variables/terraform.tfvars
+          
+          # Apply Terraform changes (auto-approve for automation)
+          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
