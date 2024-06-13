@@ -1,0 +1,1 @@
+variable identity_provider {}
