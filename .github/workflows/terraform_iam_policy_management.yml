@@ -1,2 +1,7 @@
 extends:
   - .github/workflows/terraform_template.yml
+
+jobs:
+  terraform:
+    env:
+      dir: iam_policy_management
