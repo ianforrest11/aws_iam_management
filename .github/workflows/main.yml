@@ -1,0 +1,27 @@
+# main.yml
+
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  execute-terraform:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dir:
+          - ./iam_group_management
+          - ./iam_identity_provider_management
+          - ./iam_policy_management
+          # - ./iam_role_management
+          - ./iam_user_management
+
+    steps:
+      - name: Execute Terraform Workflow
+        uses: ./.github/workflows/terraform_workflow.yml
+        with:
+          dir: ${{ matrix.dir }}

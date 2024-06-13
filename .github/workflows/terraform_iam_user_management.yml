@@ -1,7 +1,0 @@
-extends:
-  - .github/workflows/terraform_template.yml
-
-jobs:
-  terraform:
-    env:
-      dir: iam_user_management
