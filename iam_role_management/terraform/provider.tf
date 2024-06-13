@@ -9,7 +9,7 @@ terraform {
 
   backend "s3" {
     bucket         = "iforrest-aws-s3-terraform-state"
-    key            = "shared/iam/iam-users"
+    key            = "shared/iam/iam-roles"
     region         = "us-east-1"
     dynamodb_table = "iforrest-aws-dynamodb-terraform-state"
     encrypt        = true
