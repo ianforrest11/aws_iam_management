@@ -1,0 +1,7 @@
+extends:
+  - .github/workflows/terraform_template.yml
+
+jobs:
+  terraform:
+    env:
+      dir: 

@@ -42,12 +42,11 @@ jobs:
           aws sts get-caller-identity
           
       # Iterate through each Terraform directory
-      - name: Iterate through directories
-        id: iterate-directories
+      - name: execute terraform
+        id: execute-terraform
         run: |
-          for dir in $(find . -type d -name 'terraform'); do
-            cd $dir
-            echo "Entering directory $dir"
+            cd $dir/terraform
+            echo "Entering directory $dir/terraform"
             
             # Initialize Terraform
             terraform init
@@ -62,5 +61,3 @@ jobs:
             terraform apply -auto-approve -var-file=../variables/terraform.tfvars
             
             cd ..
-          done
-
