@@ -131,4 +131,4 @@ jobs:
           terraform plan -var-file=../variables/terraform.tfvars
           
           # Apply Terraform changes (auto-approve for automation)
-          # while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
+          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
