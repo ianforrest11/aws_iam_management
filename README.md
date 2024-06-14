@@ -80,15 +80,48 @@ module "iam_policy_creation_2fa" {
 
 # iam role management
 - This module creates IAM roles in AWS.
-- To use, navigate to `iam_group_management/variables/terraform.tfvars` and add a new key into the `groups` object map.  To create a group called `developers`, we would configure the object like this:
+- To use, navigate to `iam_role_management/variables/terraform.tfvars` and add a new key into the `roles` object map.  To create a role called `developer` that gives readonly access to EC2s, we would configure the object like this:
 ```
-"developers" = {
-    group_name = "developers"
-    policies   = ["arn:aws:iam::123456789012:policy/developers"]
+"developer" = {
+    assume_role_policy_name = "developer"
+    environment             = "shared"
+    name                    = "developer"
+    policies                = ["arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"]
+    purpose                 = "allow developers to interact with EC2 resources on a readonly basis"
+    }
+```
+- Next, navigate to the `iam_role_management/json` directory and create a file called `developer.json` and paste the EC2-specific assume role policy contents therein, e.g.:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
+                ]
+            }
+        }
+    ]
 }
 ```
-- this configuration assumes policy `arn:aws:iam::123456789012:policy/developers` exists in the AWS account
-- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the group `developers` in AWS
+- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the role `developer` in AWS
 
 # iam user management
-- This module creates IAM users in AWS
+- This module creates IAM users in AWS.
+- To use, navigate to `iam_user_management/variables/terraform.tfvars` and add a new key into the `users` object map.  To create a user called `jappleseed` with memberships to groups `read_only` & `2fa`, no additional individual policies, and tagged as a developer, we would configure the object like this:
+```
+"jappleseed" = {
+    first_name = "Johnathan"
+    groups     = ["read_only","2fa"]
+    last_name  = "Appleseed"
+    policies   = []
+    team       = "developers"
+    username   = "jappleseed"
+}
+```
+- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the role `developer` in AWS

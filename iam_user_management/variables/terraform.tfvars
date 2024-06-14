@@ -30,5 +30,13 @@ users = {
     policies   = []
     team       = "ReadOnly"
     username   = "jforrest"
+},
+"jappleseed" = {
+    first_name = "Johnathan"
+    groups     = ["read_only","2fa"]
+    last_name  = "Appleseed"
+    policies   = []
+    team       = "developers"
+    username   = "jappleseed"
 }
 }
