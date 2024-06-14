@@ -124,4 +124,4 @@ module "iam_policy_creation_2fa" {
     username   = "jappleseed"
 }
 ```
-- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the role `developer` in AWS
+- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the user `jappleseed` in AWS
