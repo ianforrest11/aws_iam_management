@@ -40,3 +40,55 @@ identity_provider_github = {
 ```
 - once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the identity provider `gitlab.com` in AWS
 
+# iam policy management
+- This module creates IAM policies to be used with groups, users, and roles.
+- To create an IAM policy for developers called `developer`, first navigate to `iam_policy_management/terraform/main.tf` and add a module called `iiam_policy_creation_developer`.  For the `source` variable, use `git@github.com:ianforrest11/terraform_templates.git//aws/iam_policy?ref=main`. For the `policy_name` variable, use `var.policy_name_developer`.  Like this:
+```
+module "iam_policy_creation_2fa" {
+  source                = "git@github.com:ianforrest11/terraform_templates.git//aws/iam_policy?ref=main"
+  identity_provider     = var.policy_name_developer
+}
+```
+- Second, navigate to the `iam_policy_management/terraform/variables.tf` file and add a placeholder variable to recognize the `var.policy_name_developer` we added in the previous step.  It can be as simple as one line: `variable policy_name_developer {}`
+- Third, navigate to the `iam_policy_management/variables/terraform.tfvars` file and add a variable called `policy_name_developer` and assign it a value of `developer`.  It can be as simple as one line: `policy_name_developer = "developer"`
+- Fourth, navigate to the `iam_policy_management/json` folder and create a file called `developer.json`.  This will house the contents of the `developer` IAM policy and will vary depending on use case.  For example purposes we will use a random policy created by ChatGPT:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
+```
+- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the policy `developer` in AWS
+
+
+# iam role management
+- This module creates IAM roles in AWS.
+- To use, navigate to `iam_group_management/variables/terraform.tfvars` and add a new key into the `groups` object map.  To create a group called `developers`, we would configure the object like this:
+```
+"developers" = {
+    group_name = "developers"
+    policies   = ["arn:aws:iam::123456789012:policy/developers"]
+}
+```
+- this configuration assumes policy `arn:aws:iam::123456789012:policy/developers` exists in the AWS account
+- once this updated configuration is pushed to the `main` branch, the `.github/workflows/terraform.yml` workflow will pick it up and create the group `developers` in AWS
+
+# iam user management
+- This module creates IAM users in AWS
