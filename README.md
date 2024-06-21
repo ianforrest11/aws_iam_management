@@ -1,4 +1,4 @@
-## aws_iam_management
+# aws_iam_management
 A portfolio repository for managing IAM resources in an AWS account through a github actions workflow
 
 # modules included:
