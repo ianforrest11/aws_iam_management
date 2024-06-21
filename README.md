@@ -1,5 +1,5 @@
 # aws_iam_management
-A portfolio repository for managing IAM resources in an AWS account through a github actions workflow
+A portfolio repository for managing VPCs and related resources in a portfolio AWS account through a github actions workflow
 
 # modules included:
 - iam group management
