@@ -21,15 +21,12 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
 
@@ -65,15 +62,12 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
 
@@ -109,15 +103,12 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
 
@@ -153,15 +144,12 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
 
@@ -197,15 +185,12 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
 
@@ -243,49 +228,11 @@ jobs:
 
       # Decode and configure SSH for Git operations
       - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Debugging step to check SSH key
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
-      
-      # Configure AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1.7.0
-        with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
-
-      - name: Terraform Apply IAM Group Management
-        run: |
-          cd iam_group_management/terraform
-          terraform apply -var-file=../variables/terraform.tfvars
-
-      - name: Terraform Apply IAM Identity Provider Management
-        run: |
-          cd iam_identity_provider_management/terraform
-          terraform apply -var-file=../variables/terraform.tfvars
-
-      - name: Terraform Apply IAM Policy Management
-        run: |
-          cd iam_policy_management/terraform
-          terraform apply -var-file=../variables/terraform.tfvars
-
-      - name: Terraform Apply IAM User Management
-        run: |
-          cd iam_user_management/terraform
-          terraform apply -var-file=../variables/terraform.tfvars
-
-      - name: Terraform Apply IAM Role Management
-        run: |
-          cd iam_role_management/terraform
-          terraform apply -var-file=../variables/terraform.tfvars
-
-
