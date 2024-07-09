@@ -32,6 +32,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -76,6 +77,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -120,6 +122,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -164,6 +167,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -208,6 +212,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -254,6 +259,7 @@ jobs:
           ssh-add -l
           ls -la ~/.ssh
           cat ~/.ssh/id_rsa
+          echo "SSH key setup complete"
       
       # Configure AWS credentials
       - name: Configure AWS Credentials
