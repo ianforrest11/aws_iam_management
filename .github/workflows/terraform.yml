@@ -21,18 +21,23 @@ jobs:
 
       # Decode and set the SSH_PRIVATE_KEY environment variable
       - name: Decode and Set SSH_PRIVATE_KEY
-        run: echo "SSH_PRIVATE_KEY=$(echo ${{ secrets.SSH_PRIVATE_KEY_ENCODED }} | base64 --decode)" >> $GITHUB_ENV
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
 
       # Configure SSH for Git operations
       - name: Configure SSH
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -56,3 +61,265 @@ jobs:
         run: |
           cd iam_group_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-iam-identity-provider-management:
+    name: Terraform IAM Identity Provider Management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and set the SSH_PRIVATE_KEY environment variable
+      - name: Decode and Set SSH_PRIVATE_KEY
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
+
+      # Configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Initialize Terraform
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform init
+
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform validate
+
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-iam-policy-management:
+    name: Terraform IAM Policy Management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and set the SSH_PRIVATE_KEY environment variable
+      - name: Decode and Set SSH_PRIVATE_KEY
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
+
+      # Configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Initialize Terraform
+        run: |
+          cd iam_policy_management/terraform
+          terraform init
+
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_policy_management/terraform
+          terraform validate
+
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_policy_management/terraform
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-iam-user-management:
+    name: Terraform IAM User Management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and set the SSH_PRIVATE_KEY environment variable
+      - name: Decode and Set SSH_PRIVATE_KEY
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
+
+      # Configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Initialize Terraform
+        run: |
+          cd iam_user_management/terraform
+          terraform init
+
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_user_management/terraform
+          terraform validate
+
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_user_management/terraform
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-iam-role-management:
+    name: Terraform IAM Role Management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and set the SSH_PRIVATE_KEY environment variable
+      - name: Decode and Set SSH_PRIVATE_KEY
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
+
+      # Configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Initialize Terraform
+        run: |
+          cd iam_role_management/terraform
+          terraform init
+
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_role_management/terraform
+          terraform validate
+
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_role_management/terraform
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  manual-terraform-apply:
+    name: Manual Terraform Apply
+    runs-on: ubuntu-latest
+    needs: [terraform-iam-group-management, terraform-iam-identity-provider-management, terraform-iam-policy-management, terraform-iam-user-management, terraform-iam-role-management]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and set the SSH_PRIVATE_KEY environment variable
+      - name: Decode and Set SSH_PRIVATE_KEY
+        run: echo "SSH_PRIVATE_KEY=$(echo '${{ secrets.SSH_PRIVATE_KEY_ENCODED }}' | base64 --decode)" >> $GITHUB_ENV
+
+      # Configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -l
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+      
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Terraform Apply IAM Group Management
+        run: |
+          cd iam_group_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Identity Provider Management
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Policy Management
+        run: |
+          cd iam_policy_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM User Management
+        run: |
+          cd iam_user_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Role Management
+        run: |
+          cd iam_role_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
