@@ -29,7 +29,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-      
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+
       # Configure AWS credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
@@ -70,6 +73,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -111,6 +117,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -152,6 +161,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -193,6 +205,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -236,6 +251,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+          # Debugging step to check SSH key
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
       
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -269,4 +287,5 @@ jobs:
         run: |
           cd iam_role_management/terraform
           terraform apply -var-file=../variables/terraform.tfvars
+
 
