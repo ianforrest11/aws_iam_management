@@ -1,5 +1,3 @@
-# terraform_workflow.yml
-
 name: Terraform Workflow
 
 on:
@@ -12,20 +10,20 @@ permissions:
   contents: read    # Required for actions/checkout
 
 jobs:
-  terraform:
-    name: Run Terraform
+  checkout-and-configure:
+    name: Checkout and Configure
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Configure SSH for Git operations
+      # Decode and configure SSH for Git operations
       - name: Configure SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
@@ -40,95 +38,173 @@ jobs:
 
       # Hello from AWS: WhoAmI
       - name: Sts GetCallerIdentity
-        run: |
-          aws sts get-caller-identity
-          
-      # Execute Terraform iam_group_management commands
-      - name: Execute Terraform iam_group_management
+        run: aws sts get-caller-identity
+
+  terraform-iam-group-management:
+    name: Terraform IAM Group Management
+    runs-on: ubuntu-latest
+    needs: checkout-and-configure
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize Terraform
         run: |
           cd iam_group_management/terraform
-          echo "Entering directory iam_group_management/terraform"
-          
-          # Initialize Terraform
           terraform init
 
-          # Validate Terraform configuration
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_group_management/terraform
           terraform validate
 
-          # Plan Terraform changes
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_group_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
-          
-          # Apply Terraform changes (auto-approve for automation)
-          terraform apply -auto-approve -var-file=../variables/terraform.tfvars
 
-      # Execute Terraform iam_identity_provider_management commands
-      - name: Execute Terraform iam_identity_provider_management
+  terraform-iam-identity-provider-management:
+    name: Terraform IAM Identity Provider Management
+    runs-on: ubuntu-latest
+    needs: checkout-and-configure
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize Terraform
         run: |
           cd iam_identity_provider_management/terraform
-          echo "Entering directory iam_identity_provider_management/terraform"
-          
-          # Initialize Terraform
           terraform init
 
-          # Validate Terraform configuration
-          terraform validate 
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform validate
 
-          # Plan Terraform changes
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_identity_provider_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
-          
-          # Apply Terraform changes (auto-approve for automation)
-          terraform apply -auto-approve -var-file=../variables/terraform.tfvars
 
-      # Execute Terraform iam_policy_management commands
-      - name: Execute Terraform iam_policy_management
+  terraform-iam-policy-management:
+    name: Terraform IAM Policy Management
+    runs-on: ubuntu-latest
+    needs: checkout-and-configure
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize Terraform
         run: |
           cd iam_policy_management/terraform
-          echo "Entering directory iam_policy_management/terraform"
-          
-          # Initialize Terraform
           terraform init
 
-          # Validate Terraform configuration
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_policy_management/terraform
           terraform validate
 
-          # Plan Terraform changes
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_policy_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
-          
-          # Apply Terraform changes (auto-approve for automation)
-          terraform apply -auto-approve -var-file=../variables/terraform.tfvars
 
-      # Execute Terraform iam_user_management commands
-      - name: Execute Terraform iam_user_management
+  terraform-iam-user-management:
+    name: Terraform IAM User Management
+    runs-on: ubuntu-latest
+    needs: checkout-and-configure
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize Terraform
         run: |
           cd iam_user_management/terraform
-          echo "Entering directory iam_user_management/terraform"
-          
-          # Initialize Terraform
           terraform init
 
-          # Validate Terraform configuration
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_user_management/terraform
           terraform validate
 
-          # Plan Terraform changes
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_user_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
-          
-          # Apply Terraform changes (auto-approve for automation)
-          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
 
-      # Execute Terraform iam_role_management commands
-      - name: Execute Terraform iam_role_management
+  terraform-iam-role-management:
+    name: Terraform IAM Role Management
+    runs-on: ubuntu-latest
+    needs: checkout-and-configure
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize Terraform
         run: |
           cd iam_role_management/terraform
-          echo "Entering directory iam_role_management/terraform"
-          
-          # Initialize Terraform
           terraform init
 
-          # Validate Terraform configuration
+      - name: Validate Terraform Configuration
+        run: |
+          cd iam_role_management/terraform
           terraform validate
 
-          # Plan Terraform changes
+      - name: Plan Terraform Changes
+        run: |
+          cd iam_role_management/terraform
           terraform plan -var-file=../variables/terraform.tfvars
-          
-          # Apply Terraform changes (auto-approve for automation)
-          while ! terraform apply --auto-approve -var-file=../variables/terraform.tfvars; do echo waiting for successful apply; sleep 10; done
+
+# Add a separate job for manual terraform apply
+  manual-terraform-apply:
+    name: Manual Terraform Apply
+    runs-on: ubuntu-latest
+    needs: [terraform-iam-group-management, terraform-iam-identity-provider-management, terraform-iam-policy-management, terraform-iam-user-management, terraform-iam-role-management]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Decode and configure SSH for Git operations
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+      
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Terraform Apply IAM Group Management
+        run: |
+          cd iam_group_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Identity Provider Management
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Policy Management
+        run: |
+          cd iam_policy_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM User Management
+        run: |
+          cd iam_user_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars
+
+      - name: Terraform Apply IAM Role Management
+        run: |
+          cd iam_role_management/terraform
+          terraform apply -var-file=../variables/terraform.tfvars

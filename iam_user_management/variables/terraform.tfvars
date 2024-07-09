@@ -6,7 +6,7 @@ users = {
     policies   = []
     team       = "Admin"
     username   = "iforrest"
-}
+},
 # "bhob" = {
 #     first_name = "Bob"
 #     groups     = ["read_only","2fa"]
@@ -23,14 +23,14 @@ users = {
 #     team       = "ReadOnly"
 #     username   = "jstewart"
 # },
-# "jforrest" = {
-#     first_name = "Julia"
-#     groups     = ["read_only","2fa"]
-#     last_name  = "Forrest"
-#     policies   = []
-#     team       = "ReadOnly"
-#     username   = "jforrest"
-# },
+"jforrest" = {
+    first_name = "Julia"
+    groups     = ["read_only","2fa"]
+    last_name  = "Forrest"
+    policies   = []
+    team       = "ReadOnly"
+    username   = "jforrest"
+}
 # "jappleseed" = {
 #     first_name = "Johnathan"
 #     groups     = ["read_only","2fa"]
