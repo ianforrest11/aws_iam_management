@@ -1,7 +1,5 @@
-# data.tf resource to call all policies that will be attached to roles
 locals {
-  policy_names = ["2fa", "admin", "eks_cluster", "eks_container_registry_read_only",
-                  "eks_service"]
+  policy_names = ["2fa", "admin", "eks_cluster", "eks_container_registry_read_only", "eks_service"]
 }
 
 data "aws_iam_policy" "policies" {
@@ -11,6 +9,6 @@ data "aws_iam_policy" "policies" {
 
 locals {
   policies = {
-    for name, policy in data.aws_iam_policy.policies : name => policy
+    for policy in data.aws_iam_policy.policies : policy.name => policy.arn
   }
 }
