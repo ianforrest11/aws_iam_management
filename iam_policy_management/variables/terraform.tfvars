@@ -1,2 +1,5 @@
-policy_name_admin = "admin"
-policy_name_2fa = "2fa"
+policy_name_2fa                              = "2fa"
+policy_name_admin                            = "admin"
+policy_name_eks_cluster                      = "eks_cluster"
+policy_name_eks_container_registry_read_only = "eks_container_registry_read_only"
+policy_name_eks_service                      = "eks_service"
