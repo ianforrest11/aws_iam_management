@@ -1,0 +1,181 @@
+name: Terraform Init and Plan Workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+permissions:
+  id-token: write   # Required for requesting the JWT
+  contents: read    # Required for actions/checkout
+
+jobs:
+  terraform-init-plan-group:
+    name: Init and Plan Terraform iam_group_management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Sts GetCallerIdentity
+        run: aws sts get-caller-identity
+
+      - name: Init and Plan Terraform iam_group_management
+        run: |
+          cd iam_group_management/terraform
+          terraform init
+          terraform validate
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-init-plan-identity-provider:
+    name: Init and Plan Terraform iam_identity_provider_management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Sts GetCallerIdentity
+        run: aws sts get-caller-identity
+
+      - name: Init and Plan Terraform iam_identity_provider_management
+        run: |
+          cd iam_identity_provider_management/terraform
+          terraform init
+          terraform validate
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-init-plan-policy:
+    name: Init and Plan Terraform iam_policy_management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Sts GetCallerIdentity
+        run: aws sts get-caller-identity
+
+      - name: Init and Plan Terraform iam_policy_management
+        run: |
+          cd iam_policy_management/terraform
+          terraform init
+          terraform validate
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-init-plan-user:
+    name: Init and Plan Terraform iam_user_management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Sts GetCallerIdentity
+        run: aws sts get-caller-identity
+
+      - name: Init and Plan Terraform iam_user_management
+        run: |
+          cd iam_user_management/terraform
+          terraform init
+          terraform validate
+          terraform plan -var-file=../variables/terraform.tfvars
+
+  terraform-init-plan-role:
+    name: Init and Plan Terraform iam_role_management
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: us-east-1
+
+      - name: Sts GetCallerIdentity
+        run: aws sts get-caller-identity
+
+      - name: Init and Plan Terraform iam_role_management
+        run: |
+          cd iam_role_management/terraform
+          terraform init
+          terraform validate
+          terraform plan -var-file=../variables/terraform.tfvars
