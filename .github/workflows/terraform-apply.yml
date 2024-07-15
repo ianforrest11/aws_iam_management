@@ -35,6 +35,7 @@ jobs:
       - name: Apply Terraform iam_group_management
         run: |
           cd iam_group_management/terraform
+          terraform init
           terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-identity-provider:
@@ -64,6 +65,7 @@ jobs:
       - name: Apply Terraform iam_identity_provider_management
         run: |
           cd iam_identity_provider_management/terraform
+          terraform init
           terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-policy:
@@ -93,6 +95,7 @@ jobs:
       - name: Apply Terraform iam_policy_management
         run: |
           cd iam_policy_management/terraform
+          terraform init
           terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-user:
@@ -122,6 +125,7 @@ jobs:
       - name: Apply Terraform iam_user_management
         run: |
           cd iam_user_management/terraform
+          terraform init
           terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-role:
@@ -151,4 +155,5 @@ jobs:
       - name: Apply Terraform iam_role_management
         run: |
           cd iam_role_management/terraform
+          terraform init
           terraform apply -var-file=../variables/terraform.tfvars
