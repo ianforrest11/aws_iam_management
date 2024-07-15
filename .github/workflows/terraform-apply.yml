@@ -2,10 +2,6 @@ name: Terraform Apply Workflow
 
 on:
   workflow_dispatch:  # Allow manual trigger
-  workflow_run:
-    workflows: ["Terraform Init and Plan Workflow"]
-    types:
-      - completed
 
 permissions:
   id-token: write   # Required for requesting the JWT
@@ -15,7 +11,6 @@ jobs:
   terraform-apply-group:
     name: Apply Terraform iam_group_management
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -40,13 +35,11 @@ jobs:
       - name: Apply Terraform iam_group_management
         run: |
           cd iam_group_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+          terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-identity-provider:
     name: Apply Terraform iam_identity_provider_management
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -71,13 +64,11 @@ jobs:
       - name: Apply Terraform iam_identity_provider_management
         run: |
           cd iam_identity_provider_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+          terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-policy:
     name: Apply Terraform iam_policy_management
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -102,13 +93,11 @@ jobs:
       - name: Apply Terraform iam_policy_management
         run: |
           cd iam_policy_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+          terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-user:
     name: Apply Terraform iam_user_management
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -133,13 +122,11 @@ jobs:
       - name: Apply Terraform iam_user_management
         run: |
           cd iam_user_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+          terraform apply -var-file=../variables/terraform.tfvars
 
   terraform-apply-role:
     name: Apply Terraform iam_role_management
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -164,5 +151,4 @@ jobs:
       - name: Apply Terraform iam_role_management
         run: |
           cd iam_role_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+          terraform apply -var-file=../variables/terraform.tfvars
