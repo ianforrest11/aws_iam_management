@@ -18,6 +18,7 @@
               "elasticloadbalancing:DeleteLoadBalancer",
               "elasticloadbalancing:DescribeLoadBalancers",
               "eks:DescribeCluster",
+              "eks-auth:AssumeRoleForPodIdentity",
               "autoscaling:DescribeAutoScalingGroups",
               "autoscaling:UpdateAutoScalingGroup",
               "autoscaling:DescribeTags",
