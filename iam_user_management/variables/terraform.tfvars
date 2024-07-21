@@ -1,7 +1,7 @@
 users = {
 "iforrest" = {
     first_name = "Ian"
-    groups     = ["admin","2fa"]
+    groups     = ["admin","2fa","assume_eks_cluster_role"]
     last_name  = "Forrest"
     policies   = []
     team       = "Admin"
