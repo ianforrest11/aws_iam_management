@@ -1,5 +1,12 @@
 locals {
-  policy_names = ["2fa", "admin", "eks_cluster", "eks_ec2_nodes", "eks_ecr_ec2_nodes"]
+  policy_names = [
+    "2fa",
+    "admin",
+    "AmazonEC2ContainerRegistryReadOnly",
+    "AmazonEKS_CNI_Policy",
+    "AmazonEKSWorkerNodePolicy",
+    "AmazonEKSClusterPolicy"
+  ]
 }
 
 data "aws_iam_policy" "policies" {
