@@ -3,7 +3,7 @@ users = {
     first_name = "Ian"
     groups     = ["admin","2fa"]
     last_name  = "Forrest"
-    policies   = ["assume_eks_cluster_role"]
+    policies   = ["arn:aws:iam::128333337075:policy/assume_eks_cluster_role"]
     team       = "Admin"
     username   = "iforrest"
 },
