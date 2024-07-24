@@ -72,7 +72,7 @@ jobs:
   terraform-destroy-role:
     name: Destroy Terraform iam_role_management
     runs-on: ubuntu-latest
-    needs: terraform-destroy-user
+    needs: terraform-destroy-group
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
