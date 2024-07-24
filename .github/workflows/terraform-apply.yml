@@ -8,36 +8,6 @@ permissions:
   contents: read    # Required for actions/checkout
 
 jobs:
-  terraform-apply-group:
-    name: Apply Terraform iam_group_management
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Configure SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1.7.0
-        with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
-
-      - name: Apply Terraform iam_group_management
-        run: |
-          cd iam_group_management/terraform
-          terraform init
-          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
-
   terraform-apply-identity-provider:
     name: Apply Terraform iam_identity_provider_management
     runs-on: ubuntu-latest
@@ -58,9 +28,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-to-assume: ${{ secrets.RUNNER_ROLE_ARN }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Apply Terraform iam_identity_provider_management
         run: |
@@ -71,6 +41,7 @@ jobs:
   terraform-apply-policy:
     name: Apply Terraform iam_policy_management
     runs-on: ubuntu-latest
+    needs: terraform-apply-identity-provider
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -88,9 +59,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-to-assume: ${{ secrets.RUNNER_ROLE_ARN }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Apply Terraform iam_policy_management
         run: |
@@ -101,6 +72,7 @@ jobs:
   terraform-apply-user:
     name: Apply Terraform iam_user_management
     runs-on: ubuntu-latest
+    needs: terraform-apply-policy
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -118,9 +90,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-to-assume: ${{ secrets.RUNNER_ROLE_ARN }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Apply Terraform iam_user_management
         run: |
@@ -131,6 +103,7 @@ jobs:
   terraform-apply-role:
     name: Apply Terraform iam_role_management
     runs-on: ubuntu-latest
+    needs: terraform-apply-user
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -148,12 +121,43 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::128333337075:role/GitHubActionRunner
+          role-to-assume: ${{ secrets.RUNNER_ROLE_ARN }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Apply Terraform iam_role_management
         run: |
           cd iam_role_management/terraform
+          terraform init
+          terraform apply --auto-approve -var-file=../variables/terraform.tfvars
+
+  terraform-apply-group:
+    name: Apply Terraform iam_group_management
+    runs-on: ubuntu-latest
+    needs: terraform-apply-role
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: ${{ secrets.RUNNER_ROLE_ARN }}
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Apply Terraform iam_group_management
+        run: |
+          cd iam_group_management/terraform
           terraform init
           terraform apply --auto-approve -var-file=../variables/terraform.tfvars
