@@ -140,7 +140,9 @@ jobs:
   terraform-init-plan-group:
     name: Init and Plan Terraform iam_group_management
     runs-on: ubuntu-latest
-    needs: terraform-init-plan-role
+    needs: 
+      - terraform-init-plan-user
+      - terraform-init-plan-role
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

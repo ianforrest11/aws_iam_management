@@ -103,7 +103,9 @@ jobs:
   terraform-destroy-policy:
     name: Destroy Terraform iam_policy_management
     runs-on: ubuntu-latest
-    needs: terraform-destroy-role
+    needs: 
+      - terraform-destroy-user
+      - terraform-destroy-role
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
