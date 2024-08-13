@@ -23,5 +23,12 @@ roles = {
     name                    = "GitHubActionRunner"
     policies                = ["admin"]
     purpose                 = "facilitate github interactions with aws"
+    },
+"CircleCIRunner" = {
+    assume_role_policy_name = "circleci"
+    environment             = "shared"
+    name                    = "CircleCIRunner"
+    policies                = ["admin"]
+    purpose                 = "facilitate CircleCI interactions with aws"
     }
 } 
